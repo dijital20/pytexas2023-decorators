@@ -52,29 +52,24 @@ def decorator(func: Callable[P, T]) -> Callable[P, T]:
 ```python
 LOG = logging.getLogger(__name__)
 
-...
-
 def log_call(func):
     
     @wraps(func)
     def call_logger(*args, **kwargs):
-        # Log call
         call_args = ', '.join(
-            f'{k}={v!r}' 
-            for k, v in inspect.getcallargs(func, args=args, kwargs=kwargs).items()
+            f'{k}={v!r}' for k, v in inspect.getcallargs(
+                func, args=args, kwargs=kwargs
+            ).items()
         )
         LOG.info('Calling %s with (%s)', func.__qualname__, call_args)
         
-        # Get result
         try:
             result = func(*args, **kwargs)
         
-        # Handle errors
         except:
             LOG.error('ERROR occurred calling %s', func.__qualname__, exc_info=True)
             raise
         
-        # Handle result
         else:
             LOG.info('%s returning %r', func.__qualname__, result)
             return result
@@ -87,12 +82,24 @@ def log_call(func):
 ## The Locking Decorator
 
 ```python
-
+def uses_lock(func = None, /, lock=None):
+    if not lock:
+        raise ValueError('You must specify a lock.')
+    
+    @wraps(func)
+    def wait_for_lock(*args, **kwargs):
+        LOG.info('Waiting for %r', lock)
+        with lock:
+            LOG.info('Calling %s', func.__qualname__)
+            return func(*args, **kwargs)
+        LOG.info('Released %r', lock)
+    
+    return wait_for_lock(func) if func else wait_for_lock
 ```
 
 ---
 
-## The Access Decorator
+## The Bundler Decorator
 
 ```python
 
