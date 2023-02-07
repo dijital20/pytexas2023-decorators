@@ -1,0 +1,46 @@
+# This is a basic workflow to help you get started with Actions
+
+name: Convert md to html
+on: [push, workflow_dispatch]
+jobs:
+  build:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v2
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v2
+
+      - name: Print directory
+        run: ls -a
+      
+      - name: Export Slides HTML
+        run: npx @marp-team/marp-cli@latest Slides.md -o PyTexasSlides.html --html true
+
+      - name: Export Slides PDF
+        run: npx @marp-team/marp-cli@latest Slides.md -o PyTexasSlides.pdf --html true
+
+      - name: Print directory
+        run: ls -a
+      
+      - name: Archive Exports
+        uses: actions/upload-artifact@v2
+        with:
+          name: Notes Exports
+          path: PyTexas*.*
+          retention-days: 7
+      
+      - name: Tag branch (main only)
+        if: endswith(github.ref, 'main')
+        uses: mydea/action-tag-date-version@v20
+        id: version-tag
+
+      - name: Cut a release (main only)
+        uses: ncipollo/release-action@v1
+        if: endsWith(github.ref, 'main')
+        with:
+          artifacts: PyTexas*.*
+          token: ${{ secrets.GITHUB_TOKEN }}
+          tag: ${{ steps.version-tag.outputs.version }}
