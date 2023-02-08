@@ -47,6 +47,12 @@ def decorator(func: Callable[P, T]) -> Callable[P, T]:
 
 ---
 
+## Quick decorator demo
+
+### *To the REPL!!*
+
+---
+
 ## "Observer Decorators"
 
 * *Add code before/after wrapped code to observe but not change operation.*
