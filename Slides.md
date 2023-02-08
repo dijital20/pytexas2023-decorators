@@ -47,6 +47,16 @@ def decorator(func: Callable[P, T]) -> Callable[P, T]:
 
 ---
 
+## "Observer Decorators"
+
+* *Add code before/after wrapped code to observe but not change operation.*
+* Logging function calls
+* Timing/performance measurements
+
+
+<!-- _class: invert  -->
+---
+
 ## The Logging Decorator
 
 ```python
@@ -79,6 +89,17 @@ def log_call(func):
 
 ---
 
+## "Parameterized Decorators"
+
+* *Provide input to the decorator and use that in the decorated code.*
+* Categorizing objects
+* Authorization controls/checks
+* Limiting controls/checks
+
+<!-- _class: invert  -->
+
+---
+
 ## The Locking Decorator
 
 ```python
@@ -99,8 +120,45 @@ def uses_lock(func = None, /, lock=None):
 
 ---
 
-## The Bundler Decorator
+## Mutating Decorators
+
+* *Catch input or output, and either validate or change the type.*
+* Change input/return values.
+* Validate input/output values.
+
+<!-- _class: invert  -->
+
+---
+
+## The Defaulter Decorator
 
 ```python
+def default_on_fail(func=None, /, type_=None, exceptions=Exception, default=None):
+    if not type_:
+        raise ValueError('You must specify type_.')
 
+    @wraps(func)
+    def change_output(*args, **kwargs):
+        try:
+            result = func(*args, **kwargs)
+        except exceptions:
+            LOG.warning('Caught error executing %s', func.__qualname__, exc_info=True)
+            return default
+        
+        try:
+            return type_(result)
+        except exceptions:
+            LOG.warning(
+                'Caught error converting %s to %s', 
+                type(result).__name__, type_.__name__, exc_info=True
+            )
+            return default
+    
+    return change_output(func) if func else change_output
 ```
+
+---
+
+## Questions and Closing
+
+<!-- _class: invert  -->
