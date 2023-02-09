@@ -104,7 +104,7 @@ class CategoryCollection(UserList)
     def __init__(category):
         self.category = category
 
-    def register(func):
+    def __call__(func):
         self.append(func)
         return func
 
@@ -112,7 +112,7 @@ class CategoryCollection(UserList)
 
 actions = CategoryCollection('actions')
 
-@actions.register
+@actions
 def do_something():
     ...
 ```
