@@ -95,6 +95,30 @@ def log_call(func):
 
 ---
 
+## The Registration Decorator
+
+```python
+from collections import UserList
+
+class CategoryCollection(UserList)
+    def __init__(category):
+        self.category = category
+
+    def register(func):
+        self.append(func)
+        return func
+
+...
+
+actions = CategoryCollection('actions')
+
+@actions.register
+def do_something():
+    ...
+```
+
+---
+
 ## "Parameterized Decorators"
 
 * *Provide input to the decorator and use that in the decorated code.*
