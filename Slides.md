@@ -72,12 +72,7 @@ def log_call(func):
     
     @wraps(func)
     def call_logger(*args, **kwargs):
-        call_args = ', '.join(
-            f'{k}={v!r}' for k, v in inspect.getcallargs(
-                func, args=args, kwargs=kwargs
-            ).items()
-        )
-        LOG.info('Calling %s with (%s)', func.__qualname__, call_args)
+        LOG.info('Calling %s', func.__qualname__)
         
         try:
             result = func(*args, **kwargs)
