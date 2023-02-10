@@ -7,6 +7,11 @@ style: |
         margin-top: 1em;
         align: center;
     }
+    .columns {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 1rem;
+    }
 ---
 
 # Practical Decorators
@@ -181,6 +186,31 @@ def default_on_fail(func=None, /, type_=None, exceptions=Exception, default=None
     
     return change_output(func) if func else change_output
 ```
+
+---
+
+## Pros and Cons
+
+<div class="columns">
+<div>
+
+## Pros
+
+- Makes code very portable
+- Reduces boilerplate
+- When decorators' functions are understood, aid in readability.
+
+</div>
+<div>
+
+## Cons
+
+- Gives no insight into code complexity behind the decorator.
+- Can create a layer of indirection which can make debugging complicated.
+- Parameterized decorators can be complicated to maintain.
+
+</div>
+</div>
 
 ---
 
