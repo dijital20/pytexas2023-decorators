@@ -1,3 +1,7 @@
+---
+title: PyTexas Cheat Sheet
+---
+
 # Practical Decorators Cheat Sheet
 
 ## Decorator Patterns
