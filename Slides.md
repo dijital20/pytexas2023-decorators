@@ -27,6 +27,24 @@ _paginate: false
 
 ---
 
+## Decorator Syntax
+
+This...
+
+```python
+@silence_exceptions  # <---
+def my_activity():
+    ...
+```
+
+Is the same as...
+
+```python
+my_activity = silence_exceptions(my_activity)
+```
+
+---
+
 ## Anatomy of a Decorator
 
 ```python
@@ -49,12 +67,6 @@ def decorator(func: Callable[P, T]) -> Callable[P, T]:
     
     return decorated_func  # Return that decorated function.
 ```
-
----
-
-## Quick decorator demo
-
-### *To the REPL!!*
 
 ---
 
