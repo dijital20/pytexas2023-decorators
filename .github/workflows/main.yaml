@@ -22,6 +22,16 @@ jobs:
       - name: Export Slides PDF
         run: npx @marp-team/marp-cli@latest Slides.md -o PyTexasSlides.pdf --html true
 
+      - name: Export Cheatsheet HTML
+        uses: docker://pandoc/latex:latest
+        with:
+          args: -f markdown -s --highlight-style pygments -t html -o PyTexasCheatsheet.html Cheatsheet.md
+
+      - name: Export Cheatsheet PDF
+        uses: docker://pandoc/latex:latest
+        with:
+          args: -f markdown -s --highlight-style pygments -t pdf -o PyTexasCheatsheet.pdf Cheatsheet.md
+
       - name: Print directory
         run: ls -a
       
