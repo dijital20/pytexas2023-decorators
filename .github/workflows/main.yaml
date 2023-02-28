@@ -25,7 +25,7 @@ jobs:
       - name: Export Cheatsheet HTML
         uses: docker://pandoc/latex:latest
         with:
-          args: -f markdown -s --highlight-style pygments -t html -V geometry:margin=0px -o PyTexasCheatsheet.html Cheatsheet.md
+          args: -f markdown -s --highlight-style pygments --standalone -t html5 -o PyTexasCheatsheet.html Cheatsheet.md
 
       - name: Export Cheatsheet PDF
         uses: docker://pandoc/latex:latest
