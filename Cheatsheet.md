@@ -151,3 +151,17 @@ def my_func():
 
 my_func = Decorator(func, kwarg1='foo', kwarg2='bar')
 ```
+
+## Some useful functions/libraries/decorators
+
+- Built-in
+  - `property` - Decorator that turns the wrapped function into a descriptor (object with a `__get__`, `__set__`, 
+    and `__del__`).
+- `functools`
+  - `lru_cache` - Decorator that memoizes outputs based on their input arguments.
+  - `wraps` - Decorator that decorates the function wrapper and takes the wrapped function as an argument, and updates 
+    the wrapper to look like the wrapped function.
+  - `update_wrapper` - Function that takes a wrapper function and the wrapped function, and then updates the wrapper to 
+    look like the wrapped function.
+- `contextlib`
+  - `contextmanager` - Decorator that turns a function with a single `yield` statement into a context manager.
