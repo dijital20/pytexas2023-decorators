@@ -4,11 +4,7 @@ title: PyTexas Cheat Sheet
 
 # Practical Decorators Cheat Sheet
 
-## Decorator Patterns
-
----
-
-### Simple Decorator
+## Simple Decorator
 
 ```python
 from collections.abc import Callable
@@ -42,7 +38,7 @@ my_func = decorator(my_func)
 
 ---
 
-### Parameterized Decorator (Function)
+## Parameterized Decorator (Function)
 
 ```python
 from collections.abc import Callable
@@ -81,7 +77,7 @@ my_func = decorator('foo', kwarg2='bar')(my_func)
 
 ---
 
-### Parameterized Decorator (Pytest Style)
+## Parameterized Decorator (Pytest Style)
 
 ```python
 from collections.abc import Callable
@@ -120,7 +116,7 @@ my_func = decorator(func, kwarg1='foo', kwarg2='bar')
 
 ---
 
-### Parameterized Decorator (Class)
+## Parameterized Decorator (Class)
 
 ```python
 from collections.abc import Callable
