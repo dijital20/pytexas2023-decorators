@@ -1,13 +1,19 @@
 from functools import wraps
 
 
+# `func` <-- The function ready to be called
+# `func()`  <-- Calling the function
+
+
 def basic_decorator(func):
     print(f'<-> basic_decorator decorating {func.__name__}')
     
     @wraps(func)
     def wrapper(*args, **kwargs):
-        print(f'--> Running from wrapper with {args}, {kwargs}')
+        print(f'\n--> Running from wrapper with {args}, {kwargs}')
+        
         result = func(*args, **kwargs)
+        
         print(f'<-- Finished running wrapper, returning {result}')
         return result
 
@@ -22,5 +28,6 @@ def example1(foo, bar=1):
 
 if __name__ == '__main__':
     print('    Starting __main__')
+    
     example1('hello there')
     example1(True, bar=2)
