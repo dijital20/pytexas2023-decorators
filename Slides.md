@@ -107,6 +107,17 @@ def log_call(func):
 
 ---
 
+## "Parameterized Decorators"
+
+- *Provide input to the decorator and use that in the decorated code.*
+- Categorizing objects
+- Authorization controls/checks
+- Limiting controls/checks
+
+<!-- _class: invert  -->
+
+---
+
 ## The Registration Decorator
 
 ```python
@@ -132,17 +143,6 @@ actions = CategoryCollection('actions')
 def do_something():
     ...
 ```
-
----
-
-## "Parameterized Decorators"
-
-- *Provide input to the decorator and use that in the decorated code.*
-- Categorizing objects
-- Authorization controls/checks
-- Limiting controls/checks
-
-<!-- _class: invert  -->
 
 ---
 
