@@ -33,19 +33,14 @@ def default_on_fail(func=None, *, type_=None, exceptions=Exception, default=None
 
 
 @default_on_fail(type_=int, default=1)
-def function1(i):
-    return i
-
-
-@default_on_fail(type_=int, default='')
-def function2():
-    raise RuntimeError('This is an error.')
+def get_session(payload):
+    return payload['session']
 
 
 if __name__ == '__main__':
     logging.basicConfig(level=logging.INFO, format='%(levelname).1s %(funcName)s: %(message)s')
 
-    LOG.info(f'function1(5)     --> {function1(5)!r}')
-    LOG.info(f'function1("5")   --> {function1("5")!r}')
-    LOG.info(f'function1("foo") --> {function1("foo")!r}')
-    LOG.info(f'function2        --> {function2()!r}')
+    LOG.info(f'--> %r\n', get_session({'session': 5}))
+    LOG.info(f'--> %r\n', get_session({'session': '5'}))
+    LOG.info(f'--> %r\n', get_session({'session': None}))
+    LOG.info(f'--> %r\n', get_session(None))
