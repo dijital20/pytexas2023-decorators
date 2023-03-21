@@ -1,5 +1,4 @@
 import logging
-import random
 import time
 from functools import wraps
 from threading import Lock, Thread
@@ -12,13 +11,14 @@ def uses_lock(func = None, *, lock=None):
         raise ValueError('You must specify a lock.')
     
     def wrapper(wfunc):
+        
         @wraps(wfunc)
         def wait_for_lock(*args, **kwargs):
-            LOG.info('--> Waiting for %r', lock)
+            LOG.info('--> Waiting for %d', id(lock))
             with lock:
                 LOG.info('Calling %s', wfunc.__name__)
                 result = wfunc(*args, **kwargs)
-            LOG.info('<-- Released %r', lock)
+            LOG.info('<-- Released %d', id(lock))
             return result
 
         return wait_for_lock
@@ -26,34 +26,35 @@ def uses_lock(func = None, *, lock=None):
     return wrapper(func) if func else wrapper
 
 
-lock1 = Lock()
-lock2 = Lock()
+keyboard_lock = Lock()
+mouse_lock = Lock()
 
 
-@uses_lock(lock=lock1)
-def function1():
-    LOG.info('Starting function1')
+@uses_lock(lock=keyboard_lock)
+def type_a_message():
+    LOG.info('Starting type_a_message')
     time.sleep(1)
-    LOG.info('Returning from function1.')
+    LOG.info('Returning from type_a_message.')
 
 
-@uses_lock(lock=lock1)
-def function2():
-    LOG.info('Starting function2')
+@uses_lock(lock=keyboard_lock)
+def send_keys():
+    LOG.info('Starting send_keys')
     time.sleep(3)
-    LOG.info('Returning from function2.')
+    LOG.info('Returning from send_keys.')
 
 
-@uses_lock(lock=lock2)
-def function3():
-    LOG.info('Starting function3')
+@uses_lock(lock=mouse_lock)
+def move_mouse():
+    LOG.info('Starting move_mouse')
     time.sleep(5)
-    LOG.info('Returning from function3.')
+    LOG.info('Returning from move_mouse.')
+
 
 if __name__ == '__main__':
-    logging.basicConfig(level=logging.INFO, format='%(levelname).1s %(thread)05d %(funcName)s: %(message)s')
+    logging.basicConfig(level=logging.INFO, format='%(levelname).1s %(threadName)s: %(message)s')
 
-    threads = [Thread(target=f) for _ in range(3) for f in (function1, function2, function3)]
+    threads = [Thread(target=f, name=f'{f.__name__} #{i}') for i in range(1, 4) for f in (type_a_message, send_keys, move_mouse)]
     LOG.info('Starting threads')
     for t in threads:
         t.start()
