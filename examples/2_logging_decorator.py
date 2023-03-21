@@ -2,7 +2,6 @@ import logging
 from functools import wraps
 
 
-
 LOG = logging.getLogger(__name__)
 
 def log_call(func):
