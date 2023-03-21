@@ -112,13 +112,17 @@ def log_call(func):
 ```python
 from collections import UserList
 
-class CategoryCollection(UserList)
-    def __init__(category):
+class CategoryCollection(UserList):
+    def __init__(self, category):
+        super().__init__()
         self.category = category
 
-    def __call__(func):
+    def __call__(self, func):
         self.append(func)
         return func
+
+    def call_all(self, *args, **kwargs):
+        yield from (cb(*args, *kwargs) for cb in self)
 
 ...
 
@@ -149,15 +153,19 @@ def uses_lock(func = None, *, lock=None):
     if not lock:
         raise ValueError('You must specify a lock.')
     
-    @wraps(func)
-    def wait_for_lock(*args, **kwargs):
-        LOG.info('Waiting for %r', lock)
-        with lock:
-            LOG.info('Calling %s', func.__qualname__)
-            return func(*args, **kwargs)
-        LOG.info('Released %r', lock)
+    def wrapper(wfunc):
+        @wraps(wfunc)
+        def wait_for_lock(*args, **kwargs):
+            LOG.info('--> Waiting for %r', lock)
+            with lock:
+                LOG.info('Calling %s', wfunc.__name__)
+                result = wfunc(*args, **kwargs)
+            LOG.info('<-- Released %r', lock)
+            return result
+
+        return wait_for_lock
     
-    return wait_for_lock(func) if func else wait_for_lock
+    return wrapper(func) if func else wrapper
 ```
 
 ---
@@ -179,24 +187,27 @@ def default_on_fail(func=None, *, type_=None, exceptions=Exception, default=None
     if not type_:
         raise ValueError('You must specify type_.')
 
-    @wraps(func)
-    def change_output(*args, **kwargs):
-        try:
-            result = func(*args, **kwargs)
-        except exceptions:
-            LOG.warning('Caught error executing %s', func.__qualname__, exc_info=True)
-            return default
+    def wrapper(wfunc):
+        @wraps(wfunc)
+        def change_output(*args, **kwargs):
+            try:
+                result = wfunc(*args, **kwargs)
+            except exceptions:
+                LOG.warning('Caught error executing %s', wfunc.__qualname__, exc_info=True)
+                return default
+            
+            try:
+                return type_(result)
+            except exceptions as e:
+                LOG.warning(
+                    'Caught error converting %s to %s: %s: %s', 
+                    type(result).__name__, type_.__name__, type(e).__name__, e
+                )
+                return default
         
-        try:
-            return type_(result)
-        except exceptions:
-            LOG.warning(
-                'Caught error converting %s to %s', 
-                type(result).__name__, type_.__name__, exc_info=True
-            )
-            return default
+        return change_output
     
-    return change_output(func) if func else change_output
+    return wrapper(func) if func else wrapper
 ```
 
 ---
