@@ -6,6 +6,8 @@ title: PyTexas Cheat Sheet
 
 ## Simple Decorator
 
+This is an example of a very simple decorator.
+
 ```python
 from collections.abc import Callable
 from functools import wraps
@@ -39,6 +41,8 @@ my_func = decorator(my_func)
 ---
 
 ## Parameterized Decorator (Function)
+
+Note that, with this form, the decorator must be called (end with `()`) in order to return the function wrapper.
 
 ```python
 from collections.abc import Callable
@@ -79,6 +83,8 @@ my_func = decorator('foo', kwarg2='bar')(my_func)
 
 ## Parameterized Decorator (Pytest Style)
 
+This style decorator allows use with or without a call on the decorator itself, which I first saw with `pytest`.
+
 ```python
 from collections.abc import Callable
 from functools import wraps
@@ -118,6 +124,8 @@ my_func = decorator(func, kwarg1='foo', kwarg2='bar')
 
 ## Parameterized Decorator (Class)
 
+This decorator style allows an instance of the class to be the decorator.
+
 ```python
 from collections.abc import Callable
 from functools import update_wrapper
@@ -151,6 +159,8 @@ def my_func():
 
 my_func = Decorator(func, kwarg1='foo', kwarg2='bar')
 ```
+
+---
 
 ## Some useful functions/libraries/decorators
 
