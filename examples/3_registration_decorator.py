@@ -14,23 +14,26 @@ class CategoryCollection(UserList):
         yield from (cb(*args, *kwargs) for cb in self)
 
 
-actions = CategoryCollection('actions')
+actions = CategoryCollection("actions")
+
 
 @actions
 def double(i):
     return i * 2
 
+
 @actions
 def half(i):
     return i // 2
+
 
 @actions
 def add_three(i):
     return i + 3
 
 
-if __name__ == '__main__':
-    actions(lambda i: i ** 2)
+if __name__ == "__main__":
+    actions(lambda i: i**2)
 
     print(list(actions.call_all(3)))
     print(list(actions.call_all(21)))
