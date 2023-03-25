@@ -1,10 +1,6 @@
 from functools import wraps
 
 
-# `func` <-- The function ready to be called
-# `func()`  <-- Calling the function
-
-
 def basic_decorator(func):
     print(f"<-> basic_decorator decorating {func.__name__}")
 
