@@ -15,14 +15,18 @@ def uses_lock(func = None, *, lock=None):
         raise ValueError('You must specify a lock.')
     
     def wrapper(wfunc):
+        
         @wraps(wfunc)
         def wait_for_lock(*args, **kwargs):
             LOG.info('--> Waiting for %r', lock)
+            
             with lock:
                 LOG.info('Calling %s', wfunc.__name__)
                 result = wfunc(*args, **kwargs)
+            
             LOG.info('<-- Released %r', lock)
             return result
+        
         return wait_for_lock
     
     return wrapper(func) if func else wrapper

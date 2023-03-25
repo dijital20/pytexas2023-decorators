@@ -23,7 +23,7 @@ def default_on_fail(func=None, *, type_=None, exceptions=Exception, default=None
             try:
                 result = wfunc(*args, **kwargs)
             except exceptions:
-                LOG.warning('Caught error executing %s', wfunc.__qualname__, exc_info=True)
+                LOG.warning('Caught error executing %s', wfunc.__name__, exc_info=True)
                 return default
             
             try:
