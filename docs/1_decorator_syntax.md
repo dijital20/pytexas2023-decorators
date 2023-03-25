@@ -23,6 +23,8 @@ my_impressive_function()  # <-- Makes a call to the function and refers to the r
 my_impressive_function  # <-- Refers to the function itself.
 ```
 
+![Dreams within dreams](img/DreamsWIthinDreams.jpg)
+
 ## Anatomy of a Decorator
 
 ```python

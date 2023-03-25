@@ -9,7 +9,9 @@
 
 ## Example: The Locking Decorator
 
-This decorator uses a syntax that I first saw using [pytest](https://docs.pytest.org/en/7.2.x/). This particular syntax (having `func=None` and then requiring parameters to be keyword args) allows for usage both with or without parenthesis. In this particular case, you must use with parenthesis, but in other cases where you may not need to, the syntax is good.
+This decorator uses a syntax that I first saw using [pytest](https://docs.pytest.org/en/7.2.x/). This particular syntax (having `func=None` and then requiring parameters to be keyword args) allows for usage both with or without parenthesis. In this particular case, you must use with parenthesis, but we'll see another example that makes the optional.
+
+The parameters take advantage of namespace rules. When you try to access the contents of a name, Python first checks the local namespace. Failing that, it begins checking each parent namespace, returning the value from the first namespace where the name is defined, or raising a `NameError` if it gets beyond the global namespace and still has not found the name defined.
 
 ```python
 {% 
