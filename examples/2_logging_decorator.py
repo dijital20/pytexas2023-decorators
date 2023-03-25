@@ -5,6 +5,7 @@ from functools import wraps
 LOG = logging.getLogger(__name__)
 
 
+# --- DECORATOR ---
 def log_call(func):
     @wraps(func)
     def wrapper(*args, **kwargs):
@@ -22,6 +23,9 @@ def log_call(func):
             return result
 
     return wrapper
+
+
+# --- END DECORATOR ---
 
 
 @log_call

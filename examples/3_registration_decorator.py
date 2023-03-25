@@ -1,6 +1,7 @@
 from collections import UserList
 
 
+# --- DECORATOR ---
 class CategoryCollection(UserList):
     def __init__(self, category):
         super().__init__()
@@ -13,6 +14,8 @@ class CategoryCollection(UserList):
     def call_all(self, *args, **kwargs):
         yield from (cb(*args, *kwargs) for cb in self)
 
+
+# --- END DECORATOR ---
 
 actions = CategoryCollection("actions")
 

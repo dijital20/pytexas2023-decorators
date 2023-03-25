@@ -5,6 +5,7 @@ from functools import wraps
 LOG = logging.getLogger(__name__)
 
 
+# --- DECORATOR ---
 def default_on_fail(func=None, *, type_=None, exceptions=Exception, default=None):
     if not type_:
         raise ValueError("You must specify type_.")
@@ -33,6 +34,9 @@ def default_on_fail(func=None, *, type_=None, exceptions=Exception, default=None
         return change_output
 
     return wrapper(func) if func else wrapper
+
+
+# --- END DECORATOR ---
 
 
 @default_on_fail(type_=int, default=1)

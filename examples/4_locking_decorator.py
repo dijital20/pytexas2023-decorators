@@ -6,6 +6,7 @@ from threading import Lock, Thread
 LOG = logging.getLogger(__name__)
 
 
+# --- DECORATOR ---
 def uses_lock(func=None, *, lock=None):
     if not lock:
         raise ValueError("You must specify a lock.")
@@ -24,6 +25,8 @@ def uses_lock(func=None, *, lock=None):
 
     return wrapper(func) if func else wrapper
 
+
+# --- END DECORATOR ---
 
 keyboard_lock = Lock()
 mouse_lock = Lock()
