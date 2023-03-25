@@ -11,7 +11,7 @@ LOG = logging.getLogger(__name__)
 def default_on_fail(
     func: Callable[P, T] = None,
     *,
-    type_: type | None = None,
+    type_: type | None = str,
     exceptions: type[Exception] = Exception,
     default: Any = None,
 ) -> Callable[P, T]:
@@ -21,8 +21,7 @@ def default_on_fail(
         func: Function to decorate. Defaults to None.
 
     Keyword Args:
-        type_: Type that the output should be converted to. Defaults to None, but must
-            be overridden.
+        type_: Type that the output should be converted to. Defaults to str.
         exceptions: Exception types to catch from call or conversion. Defaults to
             Exception.
         default: Default value in the event of an error. Defaults to None.
@@ -32,9 +31,25 @@ def default_on_fail(
 
     Returns:
         _type_: Function wrapper.
+
+    Examples:
+        >>> @default_on_fail
+        ... def get_session_id(payload):
+        ...     return payload['session']
+        >>> get_session_id([])
+        >>> get_session_id({})
+        >>> get_session_id({'session': 5})
+        '5'
+        >>> @default_on_fail(type_=int, default=-1)
+        ... def get_session_id(payload):
+        ...     return payload['session']
+        >>> get_session_id([])
+        -1
+        >>> get_session_id({})
+        -1
+        >>> get_session_id({'session': 5})
+        5
     """
-    if not type_:
-        raise ValueError("You must specify type_.")
 
     def wrapper(wfunc: Callable[P, T]) -> Callable[P, T]:
         """Decorates a function to convert output and handle errors.
