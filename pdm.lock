@@ -83,6 +83,12 @@ dependencies = [
 ]
 
 [[package]]
+name = "mkdocs-include-markdown-plugin"
+version = "3.9.1"
+requires_python = ">=3.6"
+summary = "Mkdocs Markdown includer plugin."
+
+[[package]]
 name = "mypy-extensions"
 version = "1.0.0"
 requires_python = ">=3.5"
@@ -144,7 +150,7 @@ summary = "Filesystem events monitoring"
 
 [metadata]
 lock_version = "4.1"
-content_hash = "sha256:31a1d89906ad36cda410a988d0d3d83131762792a23467276a70e60f1a97f7ed"
+content_hash = "sha256:7ac31547578e358cd95ada60db6a8c104dd669533cda806726f1688809ec0f7f"
 
 [metadata.files]
 "black 23.1.0" = [
@@ -253,6 +259,10 @@ content_hash = "sha256:31a1d89906ad36cda410a988d0d3d83131762792a23467276a70e60f1
 "mkdocs 1.4.2" = [
     {url = "https://files.pythonhosted.org/packages/ff/00/58f2939f8e6c5f981d9ad9b685c9915a3b315c8f34ba93f0020d64929f70/mkdocs-1.4.2-py3-none-any.whl", hash = "sha256:c8856a832c1e56702577023cd64cc5f84948280c1c0fcc6af4cd39006ea6aa8c"},
     {url = "https://files.pythonhosted.org/packages/ff/2c/932a6df2847c0ecf0875cd00bede939225734b2815fc866c78edb46d9e5d/mkdocs-1.4.2.tar.gz", hash = "sha256:8947af423a6d0facf41ea1195b8e1e8c85ad94ac95ae307fe11232e0424b11c5"},
+]
+"mkdocs-include-markdown-plugin 3.9.1" = [
+    {url = "https://files.pythonhosted.org/packages/15/6a/6c0d064adb68e6553a18ccca5c187dcb0a7884a6a4a610f51401738a8001/mkdocs_include_markdown_plugin-3.9.1-py3-none-any.whl", hash = "sha256:f33687e29ac66d045ba181ea50f054646b0090b42b0a4318f08e7f1d1235e6f6"},
+    {url = "https://files.pythonhosted.org/packages/4f/45/c48601119596157aeb453e1b1cc1eeda80ec50b6e8f508d916b39b5babe6/mkdocs_include_markdown_plugin-3.9.1.tar.gz", hash = "sha256:5e5698e78d7fea111be9873a456089daa333497988405acaac8eba2924a19152"},
 ]
 "mypy-extensions 1.0.0" = [
     {url = "https://files.pythonhosted.org/packages/2a/e2/5d3f6ada4297caebe1a2add3b126fe800c96f56dbe5d1988a2cbe0b267aa/mypy_extensions-1.0.0-py3-none-any.whl", hash = "sha256:4392f6c0eb8a5668a69e23d168ffa70f0be9ccfd32b5cc2d26a34ae5b844552d"},
