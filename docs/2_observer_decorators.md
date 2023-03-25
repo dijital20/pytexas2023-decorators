@@ -1,4 +1,4 @@
-# "Observer Decorators"
+# Observer Decorators
 
 - *Add code before/after wrapped code to observe but not change operation.*
 - Logging function calls

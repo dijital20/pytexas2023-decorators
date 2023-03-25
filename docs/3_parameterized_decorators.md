@@ -1,4 +1,4 @@
-# "Parameterized Decorators"
+# Parameterized Decorators
 
 - *Provide input to the decorator and use that in the decorated code.*
 - Categorizing objects
