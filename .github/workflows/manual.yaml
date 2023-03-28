@@ -1,10 +1,9 @@
-name: Build site and Archive
+name: Build site and archive
 on:
   - workflow_dispatch
   - push
 jobs:
   build-only:
-    if: github.event.workflow
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repo
