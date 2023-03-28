@@ -1,6 +1,7 @@
 name: Build and cut release.
 on:
   workflow_dispatch:
+  push:
   pull_request:
     types:
       - closed
