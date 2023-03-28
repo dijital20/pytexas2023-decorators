@@ -39,6 +39,6 @@ jobs:
         uses: ncipollo/release-action@v1
         if: endsWith(github.ref, 'main')
         with:
-          artifacts: site/*
+          artifacts: release.zip
           token: ${{ secrets.GITHUB_TOKEN }}
           tag: ${{ steps.version-tag.outputs.version }}
