@@ -28,7 +28,7 @@ jobs:
         run: pdm run mkdocs build
 
       - name: Zip files
-        run: zip -r release.zip sites
+        run: zip -r release.zip site
 
       - name: Tag branch (main only)
         if: endswith(github.ref, 'main')

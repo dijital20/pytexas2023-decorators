@@ -24,7 +24,7 @@ jobs:
         run: pdm run mkdocs build
 
       - name: Zip files
-        run: zip -r release.zip sites
+        run: zip -r release.zip site
 
       - name: Archive Exports
         uses: actions/upload-artifact@v3
