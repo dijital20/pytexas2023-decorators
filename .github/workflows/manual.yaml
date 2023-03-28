@@ -1,0 +1,30 @@
+name: Build site and Archive
+on: workflow_dispatch
+jobs:
+  build-only:
+    if: github.event.workflow
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.10"
+
+      - name: Setup PDM
+        uses: pdm-project/setup-pdm@v3
+
+      - name: Setup Dependencies
+        run: pdm sync
+
+      - name: Build site
+        run: pdm run mkdocs build
+
+      - name: Archive Exports
+        uses: actions/upload-artifact@v3
+        with:
+          name: Site_Export
+          path: site/*
+          retention-days: 7
