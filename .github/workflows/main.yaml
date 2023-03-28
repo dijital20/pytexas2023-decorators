@@ -27,6 +27,9 @@ jobs:
       - name: Build site
         run: pdm run mkdocs build
 
+      - name: Zip files
+        run: zip -r release.zip sites
+
       - name: Tag branch (main only)
         if: endswith(github.ref, 'main')
         uses: mydea/action-tag-date-version@v20
