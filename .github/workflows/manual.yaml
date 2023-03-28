@@ -23,9 +23,11 @@ jobs:
       - name: Build site
         run: pdm run mkdocs build
 
+      - name: Zip files
+        run: zip -r release.zip site
+
       - name: Archive Exports
         uses: actions/upload-artifact@v3
         with:
-          name: Site_Export
-          path: site/*
+          path: release.zip
           retention-days: 7
