@@ -1,5 +1,6 @@
 from collections import UserList
-from collections.abc import Callable, Iterator
+from collections.abc import Callable
+from string import ascii_uppercase
 from typing import ParamSpec, TypeVar
 
 T, P = TypeVar("T"), ParamSpec("P")
@@ -42,48 +43,48 @@ class CategoryCollection(UserList):
         self.append(func)
         return func
 
-    def call_all(self, *args: P.args, **kwargs: P.kwargs) -> Iterator[T]:
-        """Call each function and generate its output.
+    def violates(self, *args: P.args, **kwargs: P.kwargs) -> list[str]:
+        """Find registered functions that return false for the input.
 
-        Yields:
-            Output from the function.
+        Returns:
+            List of function names that returned False.
         """
-        yield from (cb(*args, *kwargs) for cb in self)
+        return [f.__name__ for f in self if not f(*args, **kwargs)]
 
 
 # --- END DECORATOR ---
 
-actions = CategoryCollection("actions")
+grammar_rules = CategoryCollection("grammar_rules")
 
 
-@actions
-def double(i: int) -> int:
+@grammar_rules
+def starts_with_a_capital(stuff: str) -> int:
     """Doubles the input.
 
     Args:
-        i: Input.
+        stuff: Input.
 
     Returns:
         Doubled value.
     """
-    return i * 2
+    return stuff.strip()[0] in ascii_uppercase
 
 
-@actions
-def half(i: int) -> int:
+@grammar_rules
+def ends_with_punctuation(sentence: str) -> int:
     """Halves the input.
 
     Args:
-        i: Input.
+        sentence: Input.
 
     Returns:
         Half the input.
     """
-    return i // 2
+    return sentence.strip()[-1] in ".?!"
 
 
-@actions
-def add_three(i: int) -> int:
+@grammar_rules
+def i_is_capitalized(sentence: str) -> int:
     """Adds 3 to the input.
 
     Args:
@@ -92,12 +93,9 @@ def add_three(i: int) -> int:
     Returns:
         Input with 3 added.
     """
-    return i + 3
+    return not any(w == "i" for w in sentence.split(" "))
 
 
 if __name__ == "__main__":
-    actions(lambda i: i**2)
-
-    print(list(actions.call_all(3)))
-    print(list(actions.call_all(21)))
-    print(list(actions.call_all(99)))
+    for s in ("i am someone!", "what is punctuation?", "foodle dee doodle dee"):
+        print(f'"{s}" violates: {", ".join(grammar_rules.violates(s))}')
