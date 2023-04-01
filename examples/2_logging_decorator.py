@@ -4,8 +4,6 @@ from functools import wraps
 from typing import ParamSpec, TypeVar
 
 T, P = TypeVar("T"), ParamSpec("P")
-
-
 LOG = logging.getLogger(__name__)
 
 
