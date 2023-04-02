@@ -1,25 +1,29 @@
 from collections import UserList
 from collections.abc import Callable
 from string import ascii_uppercase
-from typing import ParamSpec, TypeVar
+from typing import ParamSpec
 
-T, P = TypeVar("T"), ParamSpec("P")
+P = ParamSpec("P")
 
 
 # --- DECORATOR ---
 class CategoryCollection(UserList):
-    """Groups functions with the same signature for group operations.
+    """Groups functions with the same signature that define rules.
 
     Examples:
-        >>> number_transform = CategoryCollection('number_transform')
-        >>> @number_transform
-        ... def square(i):
-        ...     return i ** 2
-        >>> @number_transform
-        ... def divide(i):
-        ...     return i // 2
-        >>> list(number_transform.call_all(2))
-        [4, 1]
+        >>> number_rules = CategoryCollection('number_rules')
+        >>> @number_rules
+        ... def multiple_of_5(i):
+        ...     return i % 5 == 0
+        >>> @number_rules
+        ... def even(i):
+        ...     return i % 2 == 0
+        >>> number_rules.violates(2)
+        ['multiple_of_5']
+        >>> number_rules.violates(5)
+        ['even']
+        >>> number_rules.violates(10)
+        []
     """
 
     def __init__(self, category: str):
@@ -31,7 +35,7 @@ class CategoryCollection(UserList):
         super().__init__()
         self.category = category
 
-    def __call__(self, func: Callable[P, T]) -> Callable[P, T]:
+    def __call__(self, func: Callable[P, bool]) -> Callable[P, bool]:
         """Decorates a function to add it to the collection.
 
         Args:

@@ -60,7 +60,7 @@ def my_test_function(is_fail: bool = False) -> bool:
     Returns:
         Always returns True.
     """
-    LOG.info("Inside my_test_function, where is_fail=%r", bool(is_fail))
+    LOG.info("Inside my_test_function, where is_fail=%r", is_fail)
     if is_fail:
         raise RuntimeError("I am a scary failure!")
     return True

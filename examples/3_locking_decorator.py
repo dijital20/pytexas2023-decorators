@@ -10,9 +10,7 @@ LOG = logging.getLogger(__name__)
 
 
 # --- DECORATOR ---
-def uses_lock(
-    func: Callable[P, T] | None = None, *, lock: Lock = None
-) -> Callable[P, T]:
+def uses_lock(lock: Lock) -> Callable[[Callable[P, T]], Callable[P, T]]:
     """Decorates a function to acquired exclusive access to a resource with a lock.
 
     Args:
@@ -30,14 +28,12 @@ def uses_lock(
     Examples:
         >>> from threading import Lock
         >>> my_lock = Lock()
-        >>> @uses_lock(lock=my_lock)
+        >>> @uses_lock(my_lock)
         ... def my_function():
         ...     ...
     """
-    if not lock:
-        raise ValueError("You must specify a lock.")
 
-    def wrapper(wfunc: Callable[P, T]) -> Callable[P, T]:
+    def wrapper(func: Callable[P, T]) -> Callable[P, T]:
         """Wraps a function call to acquire a lock.
 
         Args:
@@ -47,20 +43,20 @@ def uses_lock(
             Wrapped function.
         """
 
-        @wraps(wfunc)
+        @wraps(func)
         def wrapped(*args: P.args, **kwargs: P.kwargs) -> T:
             """Wrapped function call."""
             LOG.info("--> Waiting for %d", id(lock))
             with lock:
-                LOG.info("Calling %s", wfunc.__name__)
-                result = wfunc(*args, **kwargs)
+                LOG.info("Calling %s", func.__name__)
+                result = func(*args, **kwargs)
 
             LOG.info("<-- Released %d", id(lock))
             return result
 
         return wrapped
 
-    return wrapper(func) if func else wrapper
+    return wrapper
 
 
 # --- END DECORATOR ---
@@ -69,7 +65,7 @@ keyboard_lock = Lock()
 mouse_lock = Lock()
 
 
-@uses_lock(lock=keyboard_lock)
+@uses_lock(keyboard_lock)
 def type_a_message():
     """Types a message on the machine."""
     LOG.info("Starting type_a_message")
@@ -77,7 +73,7 @@ def type_a_message():
     LOG.info("Returning from type_a_message.")
 
 
-@uses_lock(lock=keyboard_lock)
+@uses_lock(keyboard_lock)
 def send_keys():
     """Sends keystrokes to the machine."""
     LOG.info("Starting send_keys")
@@ -85,7 +81,7 @@ def send_keys():
     LOG.info("Returning from send_keys.")
 
 
-@uses_lock(lock=mouse_lock)
+@uses_lock(mouse_lock)
 def move_mouse():
     """Moves the mouse on the machine."""
     LOG.info("Starting move_mouse")

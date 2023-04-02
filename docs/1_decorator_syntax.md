@@ -1,20 +1,6 @@
-# Decorator Syntax
+# What is a decorator?
 
-This...
-
-```python
-@silence_exceptions  # <--- Sweet, beautiful syntactic sugar
-def my_activity():
-    ...
-```
-
-Is the same as...
-
-```python
-my_activity = silence_exceptions(my_activity)
-```
-
-A **decorator** is a function, that takes a function as an input, and returns a function in its place.
+A **decorator** is a function, that takes a function as an input, and returns a function in its place. It is said that the decorator function or the function it returns ***decorates*** the input function.
 
 This works because functions are **first class** in Python, meaning they can be given as input and returned as output from another function.
 
@@ -22,8 +8,6 @@ This works because functions are **first class** in Python, meaning they can be 
 my_impressive_function()  # <-- Makes a call to the function and refers to the returned result.
 my_impressive_function  # <-- Refers to the function itself.
 ```
-
-![Dreams within dreams](img/DreamsWIthinDreams.jpg)
 
 ## Anatomy of a Decorator
 
@@ -46,6 +30,24 @@ def decorator(func: Callable[P, T]) -> Callable[P, T]:
     
     return decorated_func  # Return that decorated function.
 
+```
+
+![Dreams within dreams](img/DreamsWIthinDreams.jpg)
+
+## Decorator Syntax
+
+This...
+
+```python
+@silence_exceptions  # <--- Sweet, beautiful syntactic sugar
+def my_activity():
+    ...
+```
+
+Is the same as...
+
+```python
+my_activity = silence_exceptions(my_activity)
 ```
 
 ## Decorators in the standard library
