@@ -1,12 +1,10 @@
 [tool.pdm]
 
 [project]
-name = ""
-version = ""
+name = "pytexas2023-decorators"
+version = "1.0"
 description = ""
-authors = [
-    {name = "Josh Schneider", email = "josh.schneider@gmail.com"},
-]
+authors = [{ name = "Josh Schneider", email = "josh.schneider@gmail.com" }]
 dependencies = [
     "mkdocs>=1.4.2",
     "black>=23.1.0",
@@ -14,4 +12,4 @@ dependencies = [
     "ruff>=0.0.259",
 ]
 requires-python = ">=3.9"
-license = {text = "MIT"}
+license = { text = "MIT" }
