@@ -1,17 +1,69 @@
 import logging
 from functools import wraps
+from collections.abc import Callable
+from typing import Any, ParamSpec, TypeVar
 
-
+T, P = TypeVar("T"), ParamSpec("P")
 LOG = logging.getLogger(__name__)
 
 
-def default_on_fail(func=None, *, type_=None, exceptions=Exception, default=None):
-    if not type_:
-        raise ValueError("You must specify type_.")
+# --- DECORATOR ---
+def default_on_fail(
+    func: Callable[P, T] = None,
+    *,
+    type_: type | None = str,
+    exceptions: type[Exception] = Exception,
+    default: Any = None,
+) -> Callable[P, T]:
+    """Decorates a function to handle data conversion and exceptions.
 
-    def wrapper(wfunc):
+    Args:
+        func: Function to decorate. Defaults to None.
+
+    Keyword Args:
+        type_: Type that the output should be converted to. Defaults to str.
+        exceptions: Exception types to catch from call or conversion. Defaults to
+            Exception.
+        default: Default value in the event of an error. Defaults to None.
+
+    Raises:
+        ValueError: If type_ is not specified.
+
+    Returns:
+        _type_: Function wrapper.
+
+    Examples:
+        >>> @default_on_fail
+        ... def get_session_id(payload):
+        ...     return payload['session']
+        >>> get_session_id([])
+        >>> get_session_id({})
+        >>> get_session_id({'session': 5})
+        '5'
+        >>> @default_on_fail(type_=int, default=-1)
+        ... def get_session_id(payload):
+        ...     return payload['session']
+        >>> get_session_id([])
+        -1
+        >>> get_session_id({})
+        -1
+        >>> get_session_id({'session': 5})
+        5
+    """
+
+    def wrapper(wfunc: Callable[P, T]) -> Callable[P, T]:
+        """Decorates a function to convert output and handle errors.
+
+        Args:
+            wfunc: Function to wrap.
+
+        Returns:
+            Wrapped function.
+        """
+
         @wraps(wfunc)
-        def change_output(*args, **kwargs):
+        def change_output(*args: P.args, **kwargs: P.kwargs) -> T:
+            """Wrapped function call."""
             try:
                 result = wfunc(*args, **kwargs)
             except exceptions:
@@ -35,8 +87,19 @@ def default_on_fail(func=None, *, type_=None, exceptions=Exception, default=None
     return wrapper(func) if func else wrapper
 
 
+# --- END DECORATOR ---
+
+
 @default_on_fail(type_=int, default=1)
-def get_session(payload):
+def get_session(payload) -> int:
+    """Extracts the Session field from the payload.
+
+    Args:
+        payload: Decoded JSON payload.
+
+    Returns:
+        Session value.
+    """
     return payload["session"]
 
 
@@ -45,7 +108,7 @@ if __name__ == "__main__":
         level=logging.INFO, format="%(levelname).1s %(funcName)s: %(message)s"
     )
 
-    LOG.info(f"--> %r\n", get_session({"session": 5}))
-    LOG.info(f"--> %r\n", get_session({"session": "5"}))
-    LOG.info(f"--> %r\n", get_session({"session": None}))
-    LOG.info(f"--> %r\n", get_session(None))
+    LOG.info("--> %r\n", get_session({"session": 5}))
+    LOG.info("--> %r\n", get_session({"session": "5"}))
+    LOG.info("--> %r\n", get_session({"session": None}))
+    LOG.info("--> %r\n", get_session(None))

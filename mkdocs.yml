@@ -1,0 +1,7 @@
+site_name: "PyTexas 2023: Practical Decorators"
+
+theme:
+  name: readthedocs
+
+plugins:
+  - include-markdown

@@ -1,47 +1,35 @@
-# This is a basic workflow to help you get started with Actions
-
-name: Convert md to html
-on: [push, workflow_dispatch]
+name: Build site and release
+on:
+  pull_request:
+    types:
+      - closed
 jobs:
-  build:
-    # The type of runner that the job will run on
+  release:
+    if: github.event.pull_request.merged == true
+    permissions:
+      contents: write
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repo
         uses: actions/checkout@v3
-      
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
 
-      - name: Print directory
-        run: ls -a
-      
-      - name: Export Slides HTML
-        run: npx @marp-team/marp-cli@latest Slides.md -o PyTexasSlides.html --html true
-
-      - name: Export Slides PDF
-        run: npx @marp-team/marp-cli@latest Slides.md -o PyTexasSlides.pdf --html true
-
-      - name: Export Cheatsheet HTML
-        uses: docker://pandoc/latex:latest
+      - name: Setup Python
+        uses: actions/setup-python@v4
         with:
-          args: -f markdown -s --highlight-style pygments --standalone -t html5 -o PyTexasCheatsheet.html Cheatsheet.md
+          python-version: "3.10"
 
-      - name: Export Cheatsheet PDF
-        uses: docker://pandoc/latex:latest
-        with:
-          args: -f markdown -s --highlight-style pygments -t pdf -V geometry:margin=0.2in -o PyTexasCheatsheet.pdf Cheatsheet.md
+      - name: Setup PDM
+        uses: pdm-project/setup-pdm@v3
 
-      - name: Print directory
-        run: ls -a
-      
-      - name: Archive Exports
-        uses: actions/upload-artifact@v3
-        with:
-          name: Notes Exports
-          path: PyTexas*.*
-          retention-days: 7
-      
+      - name: Setup Dependencies
+        run: pdm sync
+
+      - name: Build site
+        run: pdm run mkdocs build
+
+      - name: Zip files
+        run: zip -r release.zip site
+
       - name: Tag branch (main only)
         if: endswith(github.ref, 'main')
         uses: mydea/action-tag-date-version@v20
@@ -51,6 +39,6 @@ jobs:
         uses: ncipollo/release-action@v1
         if: endsWith(github.ref, 'main')
         with:
-          artifacts: PyTexas*.*
+          artifacts: release.zip
           token: ${{ secrets.GITHUB_TOKEN }}
           tag: ${{ steps.version-tag.outputs.version }}
